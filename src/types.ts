@@ -13,18 +13,36 @@ export interface Person {
     post: string;
     description: string;
     url: string;
-    imageFilePath: string;
+    imageFileName: string;
 }
 
 export interface Post {
     id: string;
     title: string;
     description: string;
-    imagePath: string;
+    creationDate: Date;
+    imageFileName: string;
 }
 
 export interface AdminKey {
     key: string;
     username: string;
     date: string;
+}
+
+export interface Committee {
+    name: string;
+    logoImageName: string;
+    established: string;
+    fallbackImageName: string;
+    
+    socialMedia?: Media[];
+    email?: string;
+    phone?: string; 
+}
+
+export interface Media {
+    name: string;
+    url: string;
+    logoImageName: string;
 }

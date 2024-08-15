@@ -7,6 +7,7 @@ export const pathToCommiteeFile = dataFolderPath + "commitee.json";
 
 export const pathToProfileImages = "public/images/profileImages";
 export const pathToPostImages = "public/images/postImages/";
+export const pathToCommiteeImages = "public/images/commiteeImages/";
 
 export const pathToPostsFile = dataFolderPath + "posts.json";
 export const pathToPatetosFile = dataFolderPath + "patetos.json";
