@@ -2,30 +2,35 @@
   "name": "fikit-backend",
   "version": "1.0.0",
   "description": "Backend for fikit website",
-  "main": "server.js",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "ts-node src/index.ts",
-    "test": "NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest"
   },
   "author": "Erik Persson",
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "^4.3.17",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
+    "@types/multer": "^1.4.11",
     "@types/node": "^22.2.0",
     "@types/supertest": "^6.0.2",
     "chai": "^5.1.1",
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.4",
-    "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "ts-node": "^10.9.2"
   }
 }

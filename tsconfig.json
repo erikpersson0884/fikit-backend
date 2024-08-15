@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // or ES6/ES2020 depending on the Node version
-    "module": "commonjs", // CommonJS for Node.js
-    "rootDir": "./src",
+    "target": "ES6",
+    "module": "commonjs",
     "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
+    "esModuleInterop": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
