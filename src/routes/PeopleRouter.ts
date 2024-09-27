@@ -9,7 +9,6 @@ import { uploadProfileImage } from './imgHandler';
 
 
 import { Group, Person } from '../types';
-import { setgroups } from 'process';
 
 
 const peopleRouter = Router();

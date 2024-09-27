@@ -46,3 +46,21 @@ export interface Media {
     url: string;
     logoImageName: string;
 }
+
+export interface RecipeT {
+    name: string;
+    ingredients: Ingredient[];
+}
+
+export interface Ingredient {
+    name: string;
+    weight: number;
+    unit: string;
+    density: number;
+    packageSize: number | typeof NaN;
+}
+
+export interface Instruction {
+    step:number;
+    description: string;
+}
