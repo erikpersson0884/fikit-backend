@@ -29,17 +29,15 @@ export function readFileToJson(path: string) {
 
 export function initiateDataFiles() {
 
+    [dataFolderPath, pathToProfileImages, pathToPostImages, pathToCommiteeImages].forEach((folder: string) => {
+        if (!fs.existsSync(folder)) {
+            fs.mkdirSync(folder);
+        }
+    });
+
     [pathToPostsFile, pathToPatetosFile, pathToCredentialsFile, pathToAdminkeysFile].forEach((file: string) => {
         if (!fs.existsSync(file)) {
             fs.writeFileSync(file, JSON.stringify([]));
         }
     });
-
-    [pathToProfileImages, pathToPostImages, pathToCommiteeImages, dataFolderPath].forEach((folder: string) => {
-        if (!fs.existsSync(folder)) {
-            fs.mkdirSync(folder);
-        }
-    })
-
-
 }

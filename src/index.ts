@@ -2,19 +2,18 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
+import { initiateDataFiles } from './util';
+initiateDataFiles();
+
 import authRouter from './routes/AuthRouter'
 import commiteeRouter from './routes/CommiteeRouter';
 import peopleRouter from './routes/PeopleRouter';
 import postRouter from './routes/PostRouter'
 import RecipeRouter from './routes/RecipeRouter';
 
-import { auth } from 'express-openid-connect';
-import axios from 'axios';
-
 dotenv.config();
 
 const app = express();
-
 
 
 // app.use(auth({

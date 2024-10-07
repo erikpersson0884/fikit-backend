@@ -3,7 +3,7 @@ import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 
-import {pathToPatetosFile, pathToProfileImages} from '../util';
+import {pathToPatetosFile, pathToProfileImages, createRandomSuffix} from '../util';
 import { isAdminKeyValid } from './AuthRouter';
 import { uploadProfileImage } from './imgHandler';
 
@@ -12,6 +12,15 @@ import { Group, Person } from '../types';
 
 
 const peopleRouter = Router();
+
+function sortGroups(groups: Group[]) {
+	groups.sort((a, b) => b.year - a.year);
+
+	return groups;
+}
+
+
+//  --- ---- MODIFY GROUPS ---- ---
 
 function getGroups() {
     const data = fs.readFileSync(pathToPatetosFile);
@@ -27,17 +36,65 @@ peopleRouter.get('/getAllGroups', (req, res) => {
 });
 
 peopleRouter.get('/getSittande', (req, res) => {
-	let allGroups = getGroups();
+	let allGroups: Group[] = getGroups();
 	if (allGroups.length === 0) return res.status(404).send("No sittande was found");
-	let sittande = allGroups[0];
+	let sittande: Group = allGroups[0];
 	res.status(200).send(sittande);
 });	
 
-peopleRouter.get('/getallGroups', (req, res) => {
+peopleRouter.post('/addGroup', (req, res) => {
+	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
+	
+	let allGroups: Group[] = getGroups();
+	const newGroup: Group = {
+		id: createRandomSuffix(),
+		name: req.body.newGroup.name || '',
+		year: req.body.newGroup.year || '',
+		people: []
+	}
+
+	allGroups.push(newGroup);
+	sortGroups(allGroups);
+
+	setGroups(allGroups);
+	res.status(200).send(newGroup);
+});
+
+peopleRouter.post('/deleteGroup', (req, res) => {
+	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
+
 	let allGroups = getGroups();
-	if (allGroups.length <= 1) return res.status(404).send("No patetos was found");
-	allGroups = allGroups.slice(1);
-	res.status(200).send(allGroups);
+	const groupId = req.body.groupId;
+
+	const groupIndex = allGroups.findIndex((group: Group) => group.id === groupId);
+	if (groupIndex === -1) return res.status(404).send("Group not found");
+
+	allGroups.splice(groupIndex, 1);
+
+	setGroups(allGroups);
+	res.status(200).send("group deleted successfully!");
+});
+
+peopleRouter.post('/updategroup', (req, res) => {
+	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
+
+	let allGroups = getGroups();
+
+	const updatedGroup: Group = {
+		id: req.body.updatedgroup.id,
+		name: req.body.updatedgroup.name,
+		year: req.body.updatedgroup.year,
+		people: req.body.updatedgroup.people,
+	}
+
+	let group = allGroups.find((group: Group) => group.id === updatedGroup.id);
+	if (!group) return res.status(404).send("group not found");
+
+	Object.assign(group, updatedGroup);
+	sortGroups(allGroups);
+
+	setGroups(allGroups);
+	res.status(200).send(updatedGroup);
 });
 
 
@@ -46,17 +103,26 @@ peopleRouter.get('/getallGroups', (req, res) => {
 peopleRouter.post('/addPerson', (req, res) => {
 	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
 
-	const newPerson = req.body.newPerson;
+	const newPerson: Person = {
+		id: createRandomSuffix(),
+		name: "",
+		nickname: "",
+		post: "",
+		description: "",
+		url: "",
+		imageFileName: ""
+	}
+
 	const groupId = req.body.groupId;
 
-	let allGroups = getGroups();
+	let allGroups: Group[] = getGroups();
 	
-	let group = allGroups.find((group: Group) => group.id === groupId);
+	let group: Group | undefined = allGroups.find((group: Group) => group.id === groupId);
 	if (!group) return res.status(404).send(`Group with id ${groupId} was not found`);
 	group.people.push(newPerson);
 
 	setGroups(allGroups);
-	res.status(200).send(`Person ${newPerson.name} with id ${newPerson.id} was added successfully!`);
+	res.status(200).send(newPerson);
 });
 
 peopleRouter.post('/deletePerson', (req, res) => {
@@ -113,58 +179,5 @@ peopleRouter.post('/updatePerson', (req, res) => {
 
 
 
-
-// Manage groups
-
-peopleRouter.post('/addGroup', (req, res) => {
-	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
-
-	let allGroups: Group[] = getGroups();
-	const newgroup: Group = req.body.newgroup;
-
-	allGroups.push(newgroup);
-	sortGroups(allGroups);
-
-	setGroups(allGroups);
-	res.status(200).send("group added successfully!");
-});
-
-peopleRouter.post('/deleteGroup', (req, res) => {
-	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
-
-	let allGroups = getGroups();
-	const groupId = req.body.groupId;
-
-	allGroups = allGroups.filter((group: Group) => group.id !== groupId);
-
-	setGroups(allGroups);
-	res.status(200).send("group deleted successfully!");
-});
-
-peopleRouter.post('/updategroup', (req, res) => {
-	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
-
-	let allGroups = getGroups();
-	const updatedgroup = req.body.updatedgroup;
-
-	let group = allGroups.find((group: Group) => group.id === updatedgroup.id);
-	if (!group) return res.status(404).send("group not found");
-
-	Object.assign(group, updatedgroup);
-	sortGroups(allGroups);
-
-	setGroups(allGroups);
-	res.status(200).send(updatedgroup);
-});
-
-
-
-function sortGroups(groups: Group[]) {
-	groups.sort((a, b) => b.year - a.year);
-
-	return groups;
-}
-
-setGroups(sortGroups(getGroups()));
 
 export default peopleRouter;

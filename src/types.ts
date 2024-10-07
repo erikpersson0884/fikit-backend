@@ -49,6 +49,8 @@ export interface Media {
 
 export interface RecipeT {
     name: string;
+    author?: string;
+    instructions?: Instruction[];
     ingredients: Ingredient[];
 }
 
