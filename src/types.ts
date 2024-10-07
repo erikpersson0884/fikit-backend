@@ -47,22 +47,19 @@ export interface Media {
     logoImageName: string;
 }
 
-export interface RecipeT {
+export interface Recipe {
+    id: string;
     name: string;
-    author?: string;
-    instructions?: Instruction[];
+    author: string | null;
+    instructions: string[];
     ingredients: Ingredient[];
 }
 
 export interface Ingredient {
+    id: string;
     name: string;
     weight: number;
     unit: string;
     density: number;
     packageSize: number | typeof NaN;
-}
-
-export interface Instruction {
-    step:number;
-    description: string;
 }
