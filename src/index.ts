@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 import { initiateDataFiles } from './util';
-initiateDataFiles();
 
 import authRouter from './routes/AuthRouter'
 import commiteeRouter from './routes/CommiteeRouter';
@@ -12,6 +11,7 @@ import postRouter from './routes/PostRouter'
 import RecipeRouter from './routes/RecipeRouter';
 
 dotenv.config();
+initiateDataFiles();
 
 const app = express();
 
@@ -29,7 +29,7 @@ const app = express();
 //               "Authorization": access_token ? `Bearer ${access_token}` : `pre-shared ${process.env.API_KEY}`
 //             }
 //             return (await axios.get(`${process.env.ISSUER_BASE_URL}${endpoint}`, {headers})).data
-//           } 
+//           }
 //       return {
 //         ...session,
 //       };
@@ -38,13 +38,12 @@ const app = express();
 
 
 app.use(express.static('public'));
-const corsOrigins = process.env.CORS_ORIGINS?.split(',') || [];
-
+const corsOrigins = process.env.CORS_ORIGINS?.split(',') || 'http://localhost:3000';
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,    
+    credentials: true,
 };
 
 app.use(cors(corsOptions));
