@@ -1,6 +1,6 @@
 FROM node:alpine
 
-WORKDIR /fikit_ass 
+WORKDIR /fikit_ass
 COPY . .
 
 RUN npm install
