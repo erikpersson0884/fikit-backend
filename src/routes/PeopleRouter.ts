@@ -78,17 +78,20 @@ peopleRouter.post('/deleteGroup', (req, res) => {
 peopleRouter.post('/updategroup', (req, res) => {
 	if (!isAdminKeyValid(req.body.adminKey)) return res.status(403).send("Adminkey not valid");
 
+	const providedGroup = req.body.updatedgroup;
+
 	let allGroups = getGroups();
 
-	const updatedGroup: Group = {
-		id: req.body.updatedgroup.id,
-		name: req.body.updatedgroup.name,
-		year: req.body.updatedgroup.year,
-		people: req.body.updatedgroup.people,
-	}
-
-	let group = allGroups.find((group: Group) => group.id === updatedGroup.id);
+	let group = allGroups.find((group: Group) => group.id === providedGroup.id);
 	if (!group) return res.status(404).send("group not found");
+
+
+	const updatedGroup: Group = {
+		id: group.id,
+		name: providedGroup.name || group.name,
+		year: providedGroup.year || group.year,
+		people: providedGroup.people || group.people,
+	}	
 
 	Object.assign(group, updatedGroup);
 	sortGroups(allGroups);

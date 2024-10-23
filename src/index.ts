@@ -54,7 +54,7 @@ app.use('/api/people/', peopleRouter)
 app.use('/api/posts/', postRouter)
 app.use('/api/auth/', authRouter)
 app.use('/api/commitee/', commiteeRouter)
-app.use('/api/recipe/', RecipeRouter)
+app.use('/api/recipes/', RecipeRouter)
 
 
 

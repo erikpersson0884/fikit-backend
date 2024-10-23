@@ -11,9 +11,9 @@ function storage(directoryPath: string): multer.StorageEngine {
 			},
 			filename: function (req, file, cb) {
 				const ogFile = file.originalname.split(".");
-		
-			  const uniqueSuffix = createRandomSuffix() + "." + ogFile[ogFile.length-1]
-			  cb(null, uniqueSuffix)
+
+				const uniqueSuffix = createRandomSuffix() + "." + ogFile[ogFile.length-1]
+				cb(null, uniqueSuffix)
 			}
 		})
 	)
@@ -26,4 +26,4 @@ const commiteeImageStorage = storage(pathToCommiteeImages);
 
 export const uploadPostImage = multer({ storage: postStorage }).single('postImage');
 export const uploadProfileImage = multer({ storage: profileImageStorage }).single('personImage');
-export const uploadCommiteeImage = multer({ storage: commiteeImageStorage }).single('commiteeImage');
+export const uploadCommiteeImage = multer({ storage: commiteeImageStorage }).single('commiteeLogo');

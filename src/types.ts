@@ -63,3 +63,16 @@ export interface Ingredient {
     density: number;
     packageSize: number | typeof NaN;
 }
+
+export interface CommitteeInfo {
+    name: string;
+
+    establishedYear: string;
+    slogan: string;
+    description: string;
+
+    logoImageFileName: string;
+    
+    email: string;
+}
+
